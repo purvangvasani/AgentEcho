@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PostCard } from '@/components/app/PostCard';
 import { GeneratePostDialog } from '@/components/app/GeneratePostDialog';
 import { ManualPostDialog } from '@/components/app/ManualPostDialog';
+import { CronSettingsDialog } from '@/components/app/CronSettingsDialog';
 import { Badge } from "@/components/ui/badge";
 
 const initialPosts: Post[] = [
@@ -79,6 +80,7 @@ export default function LinkedAgentDashboard() {
         <div className="flex items-center gap-2">
           <ManualPostDialog onPostCreated={handleCreatePost} />
           <GeneratePostDialog onPostCreated={handleCreatePost} />
+          <CronSettingsDialog />
         </div>
       </header>
 
