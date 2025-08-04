@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useCallback, useMemo } from 'react';
@@ -89,6 +90,7 @@ export default function LinkedAgentDashboard({ user }: LinkedAgentDashboardProps
   const handleLogout = async () => {
     await logout();
     router.push('/login');
+    router.refresh();
   };
 
   const columns = useMemo(() => Object.keys(columnConfig) as PostStatus[], []);
@@ -101,9 +103,11 @@ export default function LinkedAgentDashboard({ user }: LinkedAgentDashboardProps
           <h1 className="text-xl sm:text-2xl font-bold font-headline tracking-tight">LinkedAgent</h1>
         </div>
         <div className="flex items-center gap-2 flex-wrap justify-end">
-          <ManualPostDialog onPostCreated={handleCreatePost} />
-          <GeneratePostDialog onPostCreated={handleCreatePost} />
-          <CronSettingsDialog />
+          <div className="hidden sm:flex items-center gap-2">
+            <ManualPostDialog onPostCreated={handleCreatePost} />
+            <GeneratePostDialog onPostCreated={handleCreatePost} />
+            <CronSettingsDialog />
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -136,6 +140,13 @@ export default function LinkedAgentDashboard({ user }: LinkedAgentDashboardProps
           </DropdownMenu>
         </div>
       </header>
+       <div className="sm:hidden p-4 border-b">
+          <div className="grid grid-cols-2 gap-2">
+            <ManualPostDialog onPostCreated={handleCreatePost} />
+            <GeneratePostDialog onPostCreated={handleCreatePost} />
+            <CronSettingsDialog />
+          </div>
+        </div>
 
       <main className="flex-1 p-4 md:p-6 overflow-y-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

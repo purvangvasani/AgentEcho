@@ -11,7 +11,8 @@ import { getCurrentUser, updateUser, connectLinkedIn } from '@/lib/auth';
 import type { User } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Linkedin, Loader2 } from 'lucide-react';
+import { Linkedin, Loader2, LogOut } from 'lucide-react';
+import { logout } from '@/lib/auth';
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
@@ -64,7 +65,7 @@ export default function ProfilePage() {
       const result = await connectLinkedIn();
        if (result.success && result.user) {
         setUser(result.user);
-        toast({ title: 'LinkedIn connected successfully!' });
+        toast({ title: `LinkedIn ${result.user.linkedinAccessToken ? 'connected' : 'disconnected'} successfully!` });
       } else {
         toast({
           title: 'Connection Failed',
@@ -74,6 +75,11 @@ export default function ProfilePage() {
       }
     })
   }
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/login');
+  };
 
   if (!user) {
     return (
@@ -140,7 +146,10 @@ export default function ProfilePage() {
               <div className="flex items-center gap-2 p-3 rounded-md bg-secondary text-secondary-foreground w-full">
                 <Linkedin className="h-5 w-5 text-blue-600" />
                 <span className="font-medium">Connected to LinkedIn</span>
-                 <Button variant="destructive" size="sm" className="ml-auto" onClick={handleConnectLinkedIn}>Disconnect</Button>
+                 <Button variant="destructive" size="sm" className="ml-auto" onClick={handleConnectLinkedIn} disabled={isConnecting}>
+                  {isConnecting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Disconnect
+                </Button>
               </div>
             ) : (
               <Button onClick={handleConnectLinkedIn} disabled={isConnecting}>
@@ -149,6 +158,12 @@ export default function ProfilePage() {
                  {isConnecting && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
               </Button>
             )}
+             <div className="mt-6 w-full border-t pt-6">
+                <Button variant="outline" onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log Out</span>
+                </Button>
+             </div>
           </CardFooter>
         </Card>
       </div>

@@ -28,6 +28,7 @@ export default function LoginPage() {
       if (result.success) {
         toast({ title: 'Login successful!' });
         router.push('/');
+        router.refresh(); // Ensures the root layout re-renders with the new auth state
       } else {
         toast({
           title: 'Login Failed',
