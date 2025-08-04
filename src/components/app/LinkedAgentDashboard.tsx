@@ -6,6 +6,7 @@ import { Linkedin, Hourglass, CheckCircle, Send, PlusCircle } from 'lucide-react
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PostCard } from '@/components/app/PostCard';
 import { GeneratePostDialog } from '@/components/app/GeneratePostDialog';
+import { ManualPostDialog } from '@/components/app/ManualPostDialog';
 import { Badge } from "@/components/ui/badge";
 
 const initialPosts: Post[] = [
@@ -75,7 +76,10 @@ export default function LinkedAgentDashboard() {
           <Linkedin className="w-8 h-8 text-primary" />
           <h1 className="text-2xl font-bold font-headline tracking-tight">LinkedAgent</h1>
         </div>
-        <GeneratePostDialog onPostCreated={handleCreatePost} />
+        <div className="flex items-center gap-2">
+          <ManualPostDialog onPostCreated={handleCreatePost} />
+          <GeneratePostDialog onPostCreated={handleCreatePost} />
+        </div>
       </header>
 
       <main className="flex-1 p-4 md:p-6 overflow-y-auto">
