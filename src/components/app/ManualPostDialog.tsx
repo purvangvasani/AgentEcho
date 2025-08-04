@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -17,18 +18,17 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { PenSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { createPost } from '@/lib/posts';
+import { useRouter } from 'next/navigation';
 
-interface ManualPostDialogProps {
-  onPostCreated: (post: { topic: string; content: string }) => void;
-}
-
-export function ManualPostDialog({ onPostCreated }: ManualPostDialogProps) {
+export function ManualPostDialog() {
   const [isOpen, setIsOpen] = useState(false);
   const [topic, setTopic] = useState('');
   const [content, setContent] = useState('');
   const { toast } = useToast();
+  const router = useRouter();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
     if (topic.trim().length < 3 || content.trim().length < 3) {
@@ -40,7 +40,8 @@ export function ManualPostDialog({ onPostCreated }: ManualPostDialogProps) {
       return;
     }
 
-    onPostCreated({ topic, content });
+    await createPost({ topic, content, status: 'pending' });
+    
     toast({
       title: 'Post Created!',
       description: 'The new post has been added to the pending approval column.',
@@ -48,6 +49,7 @@ export function ManualPostDialog({ onPostCreated }: ManualPostDialogProps) {
     setIsOpen(false);
     setTopic('');
     setContent('');
+    router.refresh();
   };
 
   return (

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import type { Post, PostStatus, User } from '@/lib/types';
 import { Linkedin, Hourglass, CheckCircle, Send, PlusCircle, User as UserIcon, LogOut } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,31 +24,6 @@ import { useRouter } from 'next/navigation';
 import { logout } from '@/lib/auth';
 
 
-const initialPosts: Post[] = [
-  {
-    id: '1',
-    topic: 'AI in Software Development',
-    content: 'The rise of AI is transforming software development, from automated code generation to intelligent testing. Teams that embrace these tools will innovate faster and deliver higher-quality products. #AI #SoftwareDevelopment #FutureOfTech',
-    status: 'pending',
-    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
-  },
-  {
-    id: '2',
-    topic: 'The Future of Remote Work',
-    content: 'Remote work is here to stay. Companies are adopting hybrid models, focusing on flexibility and results. The key to success lies in strong communication and a trust-based culture. #RemoteWork #FutureOfWork #CompanyCulture',
-    status: 'approved',
-    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-  },
-  {
-    id: '3',
-    topic: 'Cybersecurity Trends in 2024',
-    content: 'With increasing digital threats, robust cybersecurity is non-negotiable. Key trends for 2024 include AI-powered threat detection, zero-trust architecture, and a focus on employee training. #Cybersecurity #DataPrivacy #InfoSec',
-    status: 'posted',
-    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-    postedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-  },
-];
-
 const columnConfig: Record<PostStatus, { title: string; icon: React.ElementType }> = {
   pending: { title: 'Pending Approval', icon: Hourglass },
   approved: { title: 'Approved', icon: CheckCircle },
@@ -57,43 +32,19 @@ const columnConfig: Record<PostStatus, { title: string; icon: React.ElementType 
 
 interface LinkedAgentDashboardProps {
   user: User;
+  posts: Post[];
 }
 
-export default function LinkedAgentDashboard({ user }: LinkedAgentDashboardProps) {
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
+export default function LinkedAgentDashboard({ user, posts }: LinkedAgentDashboardProps) {
   const router = useRouter();
-
-  const handleCreatePost = useCallback((newPostData: { topic: string; content: string }) => {
-    const newPost: Post = {
-      id: crypto.randomUUID(),
-      ...newPostData,
-      status: 'pending',
-      createdAt: new Date(),
-    };
-    setPosts((prevPosts) => [newPost, ...prevPosts]);
-  }, []);
-
-  const updatePostStatus = useCallback((postId: string, status: PostStatus) => {
-    setPosts((prevPosts) =>
-      prevPosts.map((p) =>
-        p.id === postId
-          ? { ...p, status, postedAt: status === 'posted' ? new Date() : p.postedAt }
-          : p
-      )
-    );
-  }, []);
-
-  const handleDeletePost = useCallback((postId: string) => {
-    setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId));
-  }, []);
 
   const handleLogout = async () => {
     await logout();
     router.push('/login');
     router.refresh();
   };
-
-  const columns = useMemo(() => Object.keys(columnConfig) as PostStatus[], []);
+  
+  const columns = Object.keys(columnConfig) as PostStatus[];
 
   return (
     <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden">
@@ -104,8 +55,8 @@ export default function LinkedAgentDashboard({ user }: LinkedAgentDashboardProps
         </div>
         <div className="flex items-center gap-2 flex-wrap justify-end">
           <div className="hidden sm:flex items-center gap-2">
-            <ManualPostDialog onPostCreated={handleCreatePost} />
-            <GeneratePostDialog onPostCreated={handleCreatePost} />
+            <ManualPostDialog />
+            <GeneratePostDialog />
             <CronSettingsDialog />
           </div>
           <DropdownMenu>
@@ -142,8 +93,8 @@ export default function LinkedAgentDashboard({ user }: LinkedAgentDashboardProps
       </header>
        <div className="sm:hidden p-4 border-b">
           <div className="grid grid-cols-2 gap-2">
-            <ManualPostDialog onPostCreated={handleCreatePost} />
-            <GeneratePostDialog onPostCreated={handleCreatePost} />
+            <ManualPostDialog />
+            <GeneratePostDialog />
             <CronSettingsDialog />
           </div>
         </div>
@@ -169,8 +120,6 @@ export default function LinkedAgentDashboard({ user }: LinkedAgentDashboardProps
                         <PostCard
                           key={post.id}
                           post={post}
-                          onStatusChange={updatePostStatus}
-                          onDelete={handleDeletePost}
                         />
                       ))}
                     </div>

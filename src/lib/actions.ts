@@ -1,6 +1,7 @@
 'use server';
 
 import { generateLinkedInPost } from '@/ai/flows/generate-linkedin-post';
+import { createPost } from '@/lib/posts';
 
 export async function createPostFromTopic(topic: string) {
   if (!topic || topic.trim().length < 3) {
@@ -9,6 +10,7 @@ export async function createPostFromTopic(topic: string) {
   
   try {
     const { postContent } = await generateLinkedInPost({ trendingTopic: topic });
+    await createPost({ topic, content: postContent, status: 'pending' });
     return { success: true, post: { topic, content: postContent } };
   } catch (error) {
     console.error('Error generating post:', error);

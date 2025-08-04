@@ -6,14 +6,32 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Check, Send, ThumbsDown, Trash2, MoreVertical } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { updatePostStatus, deletePost } from '@/lib/posts';
+import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 
 interface PostCardProps {
   post: Post;
-  onStatusChange: (id: string, status: PostStatus) => void;
-  onDelete: (id: string) => void;
 }
 
-export function PostCard({ post, onStatusChange, onDelete }: PostCardProps) {
+export function PostCard({ post }: PostCardProps) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const handleStatusChange = (status: PostStatus) => {
+    startTransition(async () => {
+      await updatePostStatus(post.id, status);
+      router.refresh();
+    });
+  };
+  
+  const handleDelete = () => {
+    startTransition(async () => {
+      await deletePost(post.id);
+      router.refresh();
+    });
+  };
+
   return (
     <Card className="bg-background/60 hover:shadow-md transition-shadow duration-300">
       <CardHeader>
@@ -32,14 +50,14 @@ export function PostCard({ post, onStatusChange, onDelete }: PostCardProps) {
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
         {post.status === 'pending' && (
-          <Button onClick={() => onStatusChange(post.id, 'approved')} size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+          <Button onClick={() => handleStatusChange('approved')} size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground" disabled={isPending}>
             <Check className="w-4 h-4 mr-2" />
             Approve
           </Button>
         )}
         {post.status === 'approved' && (
           <>
-            <Button onClick={() => onStatusChange(post.id, 'posted')} size="sm">
+            <Button onClick={() => handleStatusChange('posted')} size="sm" disabled={isPending}>
               <Send className="w-4 h-4 mr-2" />
               Post Now
             </Button>
@@ -47,18 +65,18 @@ export function PostCard({ post, onStatusChange, onDelete }: PostCardProps) {
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="w-8 h-8">
+            <Button variant="ghost" size="icon" className="w-8 h-8" disabled={isPending}>
               <MoreVertical className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {post.status === 'approved' && (
-               <DropdownMenuItem onClick={() => onStatusChange(post.id, 'pending')}>
+               <DropdownMenuItem onClick={() => handleStatusChange('pending')} disabled={isPending}>
                 <ThumbsDown className="w-4 h-4 mr-2" />
                 Disapprove
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem onClick={() => onDelete(post.id)} className="text-destructive focus:text-destructive focus:bg-destructive/10">
+            <DropdownMenuItem onClick={handleDelete} className="text-destructive focus:text-destructive focus:bg-destructive/10" disabled={isPending}>
               <Trash2 className="w-4 h-4 mr-2" />
               Delete
             </DropdownMenuItem>

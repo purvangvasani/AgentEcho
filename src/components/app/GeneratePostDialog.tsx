@@ -17,16 +17,14 @@ import { Label } from '@/components/ui/label';
 import { Wand2, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { createPostFromTopic } from '@/lib/actions';
+import { useRouter } from 'next/navigation';
 
-interface GeneratePostDialogProps {
-  onPostCreated: (post: { topic: string; content: string }) => void;
-}
-
-export function GeneratePostDialog({ onPostCreated }: GeneratePostDialogProps) {
+export function GeneratePostDialog() {
   const [isOpen, setIsOpen] = useState(false);
   const [topic, setTopic] = useState('');
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -36,13 +34,13 @@ export function GeneratePostDialog({ onPostCreated }: GeneratePostDialogProps) {
       const result = await createPostFromTopic(topic);
 
       if (result.success && result.post) {
-        onPostCreated(result.post);
         toast({
           title: 'Post Generated!',
           description: 'The new post has been added to the pending approval column.',
         });
         setIsOpen(false);
         setTopic('');
+        router.refresh();
       } else {
         toast({
           title: 'Error',
