@@ -27,8 +27,7 @@ export default function LoginPage() {
       const result = await login(email, password);
       if (result.success) {
         toast({ title: 'Login successful!' });
-        router.push('/');
-        // router.refresh() is key to re-validating the layout and hitting the new auth state
+        // The refresh is key to re-validating the layout and hitting the new auth state
         router.refresh(); 
       } else {
         toast({
