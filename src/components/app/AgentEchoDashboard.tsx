@@ -4,7 +4,7 @@
 
 import { useCallback } from 'react';
 import type { Post, PostStatus, User } from '@/lib/types';
-import { Linkedin, Hourglass, CheckCircle, Send, PlusCircle, User as UserIcon, LogOut } from 'lucide-react';
+import { Bot, Hourglass, CheckCircle, Send, PlusCircle, User as UserIcon, LogOut } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PostCard } from '@/components/app/PostCard';
 import { GeneratePostDialog } from '@/components/app/GeneratePostDialog';
@@ -51,7 +51,7 @@ export default function AgentEchoDashboard({ user, posts }: AgentEchoDashboardPr
     <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden">
       <header className="flex-shrink-0 sticky top-0 z-20 flex items-center justify-between px-4 sm:px-6 py-3 border-b bg-background/80 backdrop-blur-sm">
         <div className="flex items-center gap-3">
-          <Linkedin className="w-8 h-8 text-primary" />
+          <Bot className="w-8 h-8 text-primary" />
           <h1 className="text-xl sm:text-2xl font-bold font-headline tracking-tight">AgentEcho</h1>
         </div>
         <div className="flex items-center gap-2 flex-wrap justify-end">
