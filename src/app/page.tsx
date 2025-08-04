@@ -1,4 +1,4 @@
-import LinkedAgentDashboard from "@/components/app/LinkedAgentDashboard";
+import AgentEchoDashboard from "@/components/app/AgentEchoDashboard";
 import { redirect } from 'next/navigation';
 import { getCurrentUser } from "@/lib/auth";
 import { getPosts } from "@/lib/posts";
@@ -12,7 +12,7 @@ async function Dashboard() {
   }
   const posts = await getPosts();
 
-  return <LinkedAgentDashboard user={user} posts={posts} />;
+  return <AgentEchoDashboard user={user} posts={posts} />;
 }
 
 export default function Home() {

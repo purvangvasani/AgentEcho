@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'LinkedAgent',
-  description: 'An automated LinkedIn posting system that helps you manage and schedule professional content on LinkedIn with ease.',
+  title: 'AgentEcho',
+  description: 'An automated content posting system that helps you manage and schedule professional content with ease.',
 };
 
 export default function RootLayout({

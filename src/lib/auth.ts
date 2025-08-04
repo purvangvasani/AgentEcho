@@ -9,7 +9,7 @@ const MOCK_USERS: User[] = [
   { id: '1', name: 'Test User', email: 'test@example.com', avatarUrl: 'https://placehold.co/100x100.png' },
 ];
 let MOCK_LOGGED_IN_USER: User | null = null;
-const SESSION_COOKIE_NAME = 'linkedagent_session';
+const SESSION_COOKIE_NAME = 'agentecho_session';
 
 // Helper to get user from a "session"
 export async function getCurrentUser(): Promise<User | null> {
