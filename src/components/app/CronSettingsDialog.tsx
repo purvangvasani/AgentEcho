@@ -63,7 +63,7 @@ export function CronSettingsDialog() {
         </DialogHeader>
         <div className="grid gap-6 py-4">
           <div className="flex items-center justify-between">
-            <Label htmlFor="cron-enabled" className="flex flex-col gap-1">
+            <Label htmlFor="cron-enabled" className="flex flex-col gap-1 pr-4">
               <span>Enable Auto-Posting</span>
               <span className="font-normal text-muted-foreground text-xs">
                 Automatically post content from the 'Approved' column.
@@ -77,8 +77,8 @@ export function CronSettingsDialog() {
           </div>
           {isCronEnabled && (
             <>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="frequency" className="text-right">
+              <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+                <Label htmlFor="frequency" className="sm:text-right">
                   Frequency
                 </Label>
                 <Select
@@ -86,7 +86,7 @@ export function CronSettingsDialog() {
                   onValueChange={setFrequency}
                   name="frequency"
                 >
-                  <SelectTrigger className="col-span-3">
+                  <SelectTrigger className="col-span-1 sm:col-span-3">
                     <SelectValue placeholder="Select frequency" />
                   </SelectTrigger>
                   <SelectContent>
@@ -96,12 +96,12 @@ export function CronSettingsDialog() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="time" className="text-right">
+              <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+                <Label htmlFor="time" className="sm:text-right">
                   Time
                 </Label>
                 <Select value={time} onValueChange={setTime} name="time">
-                  <SelectTrigger className="col-span-3">
+                  <SelectTrigger className="col-span-1 sm:col-span-3">
                     <SelectValue placeholder="Select time" />
                   </SelectTrigger>
                   <SelectContent>

@@ -57,8 +57,9 @@ export function GeneratePostDialog({ onPostCreated }: GeneratePostDialogProps) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button>
-          <Wand2 className="w-4 h-4 mr-2" />
-          Generate New Post
+          <Wand2 className="w-4 h-4 md:mr-2" />
+          <span className="hidden md:inline">Generate New Post</span>
+          <span className="md:hidden">Generate</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -70,8 +71,8 @@ export function GeneratePostDialog({ onPostCreated }: GeneratePostDialogProps) {
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="topic" className="text-right">
+            <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+              <Label htmlFor="topic" className="sm:text-right">
                 Topic
               </Label>
               <Input
@@ -79,7 +80,7 @@ export function GeneratePostDialog({ onPostCreated }: GeneratePostDialogProps) {
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 placeholder="e.g., The future of AI"
-                className="col-span-3"
+                className="col-span-1 sm:col-span-3"
                 required
                 minLength={3}
               />

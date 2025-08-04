@@ -54,8 +54,9 @@ export function ManualPostDialog({ onPostCreated }: ManualPostDialogProps) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          <PenSquare className="w-4 h-4 mr-2" />
-          Write New Post
+          <PenSquare className="w-4 h-4 md:mr-2" />
+          <span className="hidden md:inline">Write New Post</span>
+          <span className="md:hidden">Write</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -67,8 +68,8 @@ export function ManualPostDialog({ onPostCreated }: ManualPostDialogProps) {
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="topic" className="text-right">
+            <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+              <Label htmlFor="topic" className="sm:text-right">
                 Topic
               </Label>
               <Input
@@ -76,13 +77,13 @@ export function ManualPostDialog({ onPostCreated }: ManualPostDialogProps) {
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 placeholder="e.g., The future of AI"
-                className="col-span-3"
+                className="col-span-1 sm:col-span-3"
                 required
                 minLength={3}
               />
             </div>
-            <div className="grid grid-cols-4 items-start gap-4">
-              <Label htmlFor="content" className="text-right pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-4 items-start gap-2 sm:gap-4">
+              <Label htmlFor="content" className="sm:text-right pt-2">
                 Content
               </Label>
               <Textarea
@@ -90,7 +91,7 @@ export function ManualPostDialog({ onPostCreated }: ManualPostDialogProps) {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Write your post content here..."
-                className="col-span-3"
+                className="col-span-1 sm:col-span-3"
                 required
                 minLength={3}
                 rows={5}

@@ -72,12 +72,12 @@ export default function LinkedAgentDashboard() {
 
   return (
     <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden">
-      <header className="flex-shrink-0 sticky top-0 z-20 flex items-center justify-between px-6 py-3 border-b bg-background/80 backdrop-blur-sm">
+      <header className="flex-shrink-0 sticky top-0 z-20 flex items-center justify-between px-4 sm:px-6 py-3 border-b bg-background/80 backdrop-blur-sm">
         <div className="flex items-center gap-3">
           <Linkedin className="w-8 h-8 text-primary" />
-          <h1 className="text-2xl font-bold font-headline tracking-tight">LinkedAgent</h1>
+          <h1 className="text-xl sm:text-2xl font-bold font-headline tracking-tight">LinkedAgent</h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap justify-end">
           <ManualPostDialog onPostCreated={handleCreatePost} />
           <GeneratePostDialog onPostCreated={handleCreatePost} />
           <CronSettingsDialog />
@@ -85,7 +85,7 @@ export default function LinkedAgentDashboard() {
       </header>
 
       <main className="flex-1 p-4 md:p-6 overflow-y-auto">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {columns.map((status) => {
             const filteredPosts = posts.filter((p) => p.status === status);
             const { title, icon: Icon } = columnConfig[status];
