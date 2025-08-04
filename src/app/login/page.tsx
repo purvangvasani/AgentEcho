@@ -13,8 +13,8 @@ import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('test@example.com');
+  const [password, setPassword] = useState('password');
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
   const router = useRouter();
