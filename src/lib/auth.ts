@@ -13,10 +13,17 @@ const SESSION_COOKIE_NAME = 'linkedagent_session';
 
 // Helper to get user from a "session"
 export async function getCurrentUser(): Promise<User | null> {
+  // For demonstration purposes, we'll return the first mock user by default.
+  // This will bypass the login screen for easier development.
+  const user = MOCK_USERS[0];
+  if (user) {
+    return { ...user };
+  }
+  
   const session = cookies().get(SESSION_COOKIE_NAME);
   if (session?.value) {
-    const user = MOCK_USERS.find(u => u.id === session.value);
-    return user ? {...user} : null;
+    const userFromCookie = MOCK_USERS.find(u => u.id === session.value);
+    return userFromCookie ? {...userFromCookie} : null;
   }
   return null;
 }
