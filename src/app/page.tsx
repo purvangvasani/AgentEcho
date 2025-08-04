@@ -6,9 +6,9 @@ import { Loader2 } from "lucide-react";
 
 async function Dashboard() {
   const user = await getCurrentUser();
-  if (!user) {
-    redirect('/login');
-  }
+  // if (!user) {
+  //   redirect('/login');
+  // }
   return <LinkedAgentDashboard user={user} />;
 }
 

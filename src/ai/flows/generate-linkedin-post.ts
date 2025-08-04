@@ -29,11 +29,16 @@ export async function generateLinkedInPost(input: GenerateLinkedInPostInput): Pr
 
 const generateLinkedInPostPrompt = ai.definePrompt({
   name: 'generateLinkedInPostPrompt',
-  input: {schema: GenerateLinkedInPostInputSchema},
+  input: {schema: z.object({
+    trendingTopic: z.string(),
+    sentiment: z.string(),
+  })},
   output: {schema: GenerateLinkedInPostOutputSchema},
   prompt: `You are a social media expert specializing in creating engaging LinkedIn posts.
 
-  Generate a LinkedIn post about the following trending topic:
+  Generate a LinkedIn post about the following trending topic.
+  The sentiment around this topic is currently "{{sentiment}}", so tailor the post's tone accordingly.
+
   Trending Topic: {{{trendingTopic}}}
   `,
 });
@@ -45,7 +50,35 @@ const generateLinkedInPostFlow = ai.defineFlow(
     outputSchema: GenerateLinkedInPostOutputSchema,
   },
   async input => {
-    const {output} = await generateLinkedInPostPrompt(input);
+    // 1. Call your Python API here
+    let sentiment = 'neutral';
+    try {
+      // IMPORTANT: Replace this with your actual Python API endpoint.
+      const response = await fetch('https://your-python-api.com/analyze-sentiment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add any auth headers if your API requires them e.g.,
+          // 'Authorization': `Bearer ${process.env.PYTHON_API_KEY}`
+        },
+        body: JSON.stringify({ topic: input.trendingTopic }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        sentiment = data.sentiment; // Assuming your API returns { "sentiment": "positive" }
+      }
+    } catch (error) {
+      console.error("Could not connect to Python API. Using default sentiment.", error);
+      // Handle connection errors if necessary
+    }
+    
+    // 2. Use the result from the API in the prompt
+    const {output} = await generateLinkedInPostPrompt({
+      trendingTopic: input.trendingTopic,
+      sentiment: sentiment,
+    });
+    
     return output!;
   }
 );
