@@ -1,14 +1,27 @@
 "use client";
 
 import { useState, useCallback, useMemo } from 'react';
-import type { Post, PostStatus } from '@/lib/types';
-import { Linkedin, Hourglass, CheckCircle, Send, PlusCircle } from 'lucide-react';
+import type { Post, PostStatus, User } from '@/lib/types';
+import { Linkedin, Hourglass, CheckCircle, Send, PlusCircle, User as UserIcon, LogOut } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PostCard } from '@/components/app/PostCard';
 import { GeneratePostDialog } from '@/components/app/GeneratePostDialog';
 import { ManualPostDialog } from '@/components/app/ManualPostDialog';
 import { CronSettingsDialog } from '@/components/app/CronSettingsDialog';
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useRouter } from 'next/navigation';
+import { logout } from '@/lib/auth';
+
 
 const initialPosts: Post[] = [
   {
@@ -41,8 +54,13 @@ const columnConfig: Record<PostStatus, { title: string; icon: React.ElementType 
   posted: { title: 'Posted', icon: Send },
 };
 
-export default function LinkedAgentDashboard() {
+interface LinkedAgentDashboardProps {
+  user: User;
+}
+
+export default function LinkedAgentDashboard({ user }: LinkedAgentDashboardProps) {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const router = useRouter();
 
   const handleCreatePost = useCallback((newPostData: { topic: string; content: string }) => {
     const newPost: Post = {
@@ -68,6 +86,11 @@ export default function LinkedAgentDashboard() {
     setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId));
   }, []);
 
+  const handleLogout = async () => {
+    await logout();
+    router.push('/login');
+  };
+
   const columns = useMemo(() => Object.keys(columnConfig) as PostStatus[], []);
 
   return (
@@ -81,6 +104,36 @@ export default function LinkedAgentDashboard() {
           <ManualPostDialog onPostCreated={handleCreatePost} />
           <GeneratePostDialog onPostCreated={handleCreatePost} />
           <CronSettingsDialog />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user.avatarUrl} alt={user.name} />
+                  <AvatarFallback>{user.name?.[0]}</AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{user.name}</p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {user.email}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => router.push('/profile')}>
+                <UserIcon className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 
