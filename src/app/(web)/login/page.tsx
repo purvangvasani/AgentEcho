@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,13 +11,21 @@ import { login } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
+import { useAppContext } from '@/lib/AppContext';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('test@example.com');
   const [password, setPassword] = useState('password');
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+  const { user } = useAppContext();
   const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push('/home');
+    }
+  }, [user]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -27,8 +35,9 @@ export default function LoginPage() {
       const result = await login(email, password);
       if (result.success) {
         toast({ title: 'Login successful!' });
+        console.log("result", result);
         // The refresh is key to re-validating the layout and hitting the new auth state
-        router.refresh(); 
+        router.push('/home'); 
       } else {
         toast({
           title: 'Login Failed',

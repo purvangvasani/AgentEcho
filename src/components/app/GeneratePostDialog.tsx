@@ -55,9 +55,9 @@ export function GeneratePostDialog() {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button>
-          <Wand2 className="w-4 h-4 md:mr-2" />
-          <span className="hidden md:inline">Generate New Post</span>
-          <span className="md:hidden">Generate</span>
+          <Wand2 className="w-4 h-4" />
+          {/* <span className="hidden md:inline">Generate New Post</span>
+          <span className="md:hidden">Generate</span> */}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

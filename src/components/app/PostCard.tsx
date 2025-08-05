@@ -46,7 +46,7 @@ export function PostCard({ post }: PostCardProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm whitespace-pre-wrap">{post.content}</p>
+        <p className="text-sm whitespace-pre-wrap" style={{ display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', overflow: 'hidden', textAlign: 'justify' }}>{post.content}</p>
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
         {post.status === 'pending' && (

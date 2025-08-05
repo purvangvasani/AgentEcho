@@ -56,9 +56,9 @@ export function ManualPostDialog() {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          <PenSquare className="w-4 h-4 md:mr-2" />
-          <span className="hidden md:inline">Write New Post</span>
-          <span className="md:hidden">Write</span>
+          <PenSquare className="w-4 h-4" />
+          {/* <span className="hidden md:inline">Write New Post</span>
+          <span className="md:hidden">Write</span> */}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

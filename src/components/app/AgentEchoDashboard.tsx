@@ -11,16 +11,8 @@ import { GeneratePostDialog } from '@/components/app/GeneratePostDialog';
 import { ManualPostDialog } from '@/components/app/ManualPostDialog';
 import { CronSettingsDialog } from '@/components/app/CronSettingsDialog';
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+
+
 import { useRouter } from 'next/navigation';
 import { logout } from '@/lib/auth';
 
@@ -48,8 +40,8 @@ export default function AgentEchoDashboard({ user, posts }: AgentEchoDashboardPr
   const columns = Object.keys(columnConfig) as PostStatus[];
 
   return (
-    <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden">
-      <header className="flex-shrink-0 sticky top-0 z-20 flex items-center justify-between px-4 sm:px-6 py-3 border-b bg-background/80 backdrop-blur-sm">
+    <>
+      {/* <header className="flex-shrink-0 sticky top-0 z-20 flex items-center justify-between px-4 sm:px-6 py-3 border-b bg-background/80 backdrop-blur-sm">
         <div className="flex items-center gap-3">
           <Bot className="w-8 h-8 text-primary" />
           <h1 className="text-xl sm:text-2xl font-bold font-headline tracking-tight">AgentEcho</h1>
@@ -84,6 +76,11 @@ export default function AgentEchoDashboard({ user, posts }: AgentEchoDashboardPr
                 <span>Profile</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => router.push('/profile')}>
+                <UserIcon className="mr-2 h-4 w-4" />
+                <span>Cron Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
@@ -91,7 +88,7 @@ export default function AgentEchoDashboard({ user, posts }: AgentEchoDashboardPr
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </header>
+      </header> */}
        <div className="sm:hidden p-4 border-b">
           <div className="grid grid-cols-2 gap-2">
             <ManualPostDialog />
@@ -116,14 +113,16 @@ export default function AgentEchoDashboard({ user, posts }: AgentEchoDashboardPr
                 </CardHeader>
                 <CardContent className="flex-1 p-4 pt-0 overflow-y-auto">
                   {filteredPosts.length > 0 ? (
-                    <div className="space-y-4">
-                      {filteredPosts.sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime()).map((post) => (
-                        <PostCard
-                          key={post.id}
-                          post={post}
-                        />
-                      ))}
-                    </div>
+                    <>
+                      <div className="space-y-4 mt-2">
+                        {filteredPosts.sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime()).map((post) => (
+                          <PostCard
+                            key={post.id}
+                            post={post}
+                          />
+                        ))}
+                      </div>
+                    </>
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full p-8 text-center border-2 border-dashed rounded-lg text-muted-foreground">
                       <PlusCircle className="w-10 h-10 mb-2" />
@@ -136,6 +135,6 @@ export default function AgentEchoDashboard({ user, posts }: AgentEchoDashboardPr
           })}
         </div>
       </main>
-    </div>
+    </>
   );
 }

@@ -44,61 +44,19 @@ export default function AgentEchoDashboard({ user, posts }: AgentEchoDashboardPr
     router.push('/login');
     router.refresh();
   };
-  
+
   const columns = Object.keys(columnConfig) as PostStatus[];
 
   return (
-    <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden">
-      <header className="flex-shrink-0 sticky top-0 z-20 flex items-center justify-between px-4 sm:px-6 py-3 border-b bg-background/80 backdrop-blur-sm">
-        <div className="flex items-center gap-3">
-          <Linkedin className="w-8 h-8 text-primary" />
-          <h1 className="text-xl sm:text-2xl font-bold font-headline tracking-tight">AgentEcho</h1>
+    <>
+     
+      <div className="sm:hidden p-4 border-b">
+        <div className="grid grid-cols-2 gap-2">
+          <ManualPostDialog />
+          <GeneratePostDialog />
+          <CronSettingsDialog />
         </div>
-        <div className="flex items-center gap-2 flex-wrap justify-end">
-          <div className="hidden sm:flex items-center gap-2">
-            <ManualPostDialog />
-            <GeneratePostDialog />
-            <CronSettingsDialog />
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={user.avatarUrl} alt={user.name} />
-                  <AvatarFallback>{user.name?.[0]}</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user.name}</p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    {user.email}
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => router.push('/profile')}>
-                <UserIcon className="mr-2 h-4 w-4" />
-                <span>Profile</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </header>
-       <div className="sm:hidden p-4 border-b">
-          <div className="grid grid-cols-2 gap-2">
-            <ManualPostDialog />
-            <GeneratePostDialog />
-            <CronSettingsDialog />
-          </div>
-        </div>
+      </div>
 
       <main className="flex-1 p-4 md:p-6 overflow-y-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -117,7 +75,7 @@ export default function AgentEchoDashboard({ user, posts }: AgentEchoDashboardPr
                 <CardContent className="flex-1 p-4 pt-0 overflow-y-auto">
                   {filteredPosts.length > 0 ? (
                     <div className="space-y-4">
-                      {filteredPosts.sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime()).map((post) => (
+                      {filteredPosts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).map((post) => (
                         <PostCard
                           key={post.id}
                           post={post}
@@ -136,6 +94,6 @@ export default function AgentEchoDashboard({ user, posts }: AgentEchoDashboardPr
           })}
         </div>
       </main>
-    </div>
+    </>
   );
 }
